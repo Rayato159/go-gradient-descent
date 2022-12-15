@@ -1,0 +1,24 @@
+{
+  "name": "albums-migrations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "migrate-mongo-config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rayato159/facebook-oauth-but-golang.git"
+  },
+  "author": "Ruangyot Nanchiang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rayato159/facebook-oauth-but-golang/issues"
+  },
+  "homepage": "https://github.com/Rayato159/facebook-oauth-but-golang#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "mongodb": "^4.12.1"
+  },
+  "type": "module"
+}
