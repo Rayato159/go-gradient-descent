@@ -51,8 +51,6 @@ func (s *server) mapHandlers() error {
 	// Group a version
 	// v1 := s.App.Group("/v1")
 
-	//* Facebook group
-
 	// End point not found error response
 	s.App.Use(func(c *fiber.Ctx) error {
 		log.Println("error, endpoint is not found")
