@@ -4,11 +4,33 @@ export const up = async (db, client) => {
     const session = client.startSession();
     try {
         await session.withTransaction(async () => {
-            await db.createCollection("data", {
+            await db.createCollection("train_data", {
                 validator: {
                     $jsonSchema: {
                         bsonType: "object",
-                        title: "Product Object Validation",
+                        title: "Train Data Object Validation",
+                        required: ["x", "y"],
+                        properties: {
+                            x: {
+                                bsonType: "double",
+                                description:
+                                    "'x' must be a double and is required",
+                            },
+                            y: {
+                                bsonType: "double",
+                                description:
+                                    "'y' must be a double and is required",
+                            },
+                        },
+                    },
+                },
+            });
+
+            await db.createCollection("test_data", {
+                validator: {
+                    $jsonSchema: {
+                        bsonType: "object",
+                        title: "Test Data Object Validation",
                         required: ["x", "y"],
                         properties: {
                             x: {
@@ -48,7 +70,7 @@ export const up = async (db, client) => {
                 },
             });
 
-            await db.collection("data").insertMany([
+            await db.collection("train_data").insertMany([
                 {
                     x: Double(1.0),
                     y: Double(2.0),
@@ -81,6 +103,9 @@ export const up = async (db, client) => {
                     x: Double(8.0),
                     y: Double(13.0),
                 },
+            ]);
+
+            await db.collection("test_data").insertMany([
                 {
                     x: Double(9.0),
                     y: Double(15.0),

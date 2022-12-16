@@ -19,13 +19,7 @@ docker pull mongo
 ```
 start container
 ```bash
-docker run
-    -e MONGO_INITDB_ROOT_USERNAME=root
-    -e MONGO_INITDB_ROOT_PASSWORD=123456
-    -p 27017:27017
-    -v data:/data
-    --name go-ml-v1-db
-    -d mongo:latest
+docker run -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=123456 -p 27017:27017 -v data:/data --name go-ml-v1-db -d mongo:latest
 ```
 configuration (before into the container)
 ```bash
