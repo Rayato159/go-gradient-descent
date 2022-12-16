@@ -60,11 +60,11 @@ func (mr *modelsRep) GetData(ctx context.Context, getType string, ratio float64)
 		fmt.Println(err.Error())
 		return nil, fmt.Errorf("error, can't aggregate data collection with an error: %v", err.Error())
 	}
+
 	data := make([]entities.Data, 0)
 	if err = cursor.All(ctx, &data); err != nil {
 		fmt.Println(err.Error())
 		return nil, fmt.Errorf("error, can't cursor a data with an error: %v", err.Error())
 	}
-	fmt.Println(data)
 	return data, nil
 }
