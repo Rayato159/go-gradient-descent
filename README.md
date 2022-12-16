@@ -11,6 +11,19 @@
     <li><strong>1.0.0</strong></li>
 </ul>
 
+<h2>API List</h2>
+<ul>
+    <li><strong>Get Data</strong></li>
+    <li><strong>Insert a new data</strong></li>
+    <li><strong>Train Data</strong></li>
+    <li><strong>Test Data</strong></li>
+    <li><strong>Predict a result</strong></li>
+    <li><strong>Clear data</strong></li>
+</ul>
+
+<h2>Solution</h2>
+<img src="pkg\plots\figure_1.png">
+
 <h2>🐳 MongoDb Docker Run Container</h2>
 
 pull mongo image
@@ -58,16 +71,3 @@ up or down
 ```bash
 migrate-mongo [up|down]
 ```
-
-<h2>API List</h2>
-<ul>
-    <li><strong>Get Data</strong></li>
-    <li><strong>Insert a new data</strong></li>
-    <li><strong>Train Data</strong></li>
-    <li><strong>Test Data</strong></li>
-    <li><strong>Predict a result</strong></li>
-    <li><strong>Clear data</strong></li>
-</ul>
-
-<h2>Solution</h2>
-<img src="pkg\plots\figure_1.png">
