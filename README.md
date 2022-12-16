@@ -60,3 +60,14 @@ migrate-mongo [up|down]
 ```
 
 <h2>API List</h2>
+<ul>
+    <li><strong>Get Data</strong></li>
+    <li><strong>Insert a new data</strong></li>
+    <li><strong>Train Data</strong></li>
+    <li><strong>Test Data</strong></li>
+    <li><strong>Predict a result</strong></li>
+    <li><strong>Clear data</strong></li>
+</ul>
+
+<h2>Solution</h2>
+<img src="pkg\plots\figure_1.png">

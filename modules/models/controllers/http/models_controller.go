@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,15 +19,27 @@ func NewModelsController(r fiber.Router, modelsUse entities.ModelsUsecase) {
 	controller := &modelsCon{
 		ModelsUse: modelsUse,
 	}
-	r.Get("/", controller.GetTrainData)
+	r.Get("/data", controller.GetData)
 }
 
-func (mc *modelsCon) GetTrainData(c *fiber.Ctx) error {
+func (mc *modelsCon) GetData(c *fiber.Ctx) error {
 	ctx := context.WithValue(c.Context(), entities.ModelsCon, time.Now().UnixMilli())
 	log.Printf("called:\t%v", utils.Trace())
 	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsCon).(int64)))
 
-	res, err := mc.ModelsUse.GetTrainData(ctx, 0.8)
+	getTypeMap := map[string]string{
+		"train": "train",
+		"test":  "test",
+	}
+	getTypeQuery := strings.ToLower(c.Query("get_type"))
+	if getTypeMap[getTypeQuery] == "" || getTypeMap[getTypeQuery] != getTypeQuery {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.ErrResponse{
+			Status:  fiber.ErrBadRequest.Message,
+			Message: "error, get_type is invalid",
+		})
+	}
+
+	res, err := mc.ModelsUse.GetData(ctx, getTypeQuery)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(entities.ErrResponse{
 			Status:  fiber.ErrInternalServerError.Message,

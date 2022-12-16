@@ -11,13 +11,13 @@ const (
 )
 
 type ModelsRepository interface {
-	GetTrainData(ctx context.Context, ratio float64) ([]Data, error)
+	GetData(ctx context.Context, getType string) ([]Data, error)
 }
 type ModelsUsecase interface {
-	GetTrainData(ctx context.Context, ratio float64) ([]Data, error)
+	GetData(ctx context.Context, getType string) ([]Data, error)
 }
 
 type Data struct {
-	X float64
-	Y float64
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
 }

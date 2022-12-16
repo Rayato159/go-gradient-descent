@@ -19,12 +19,12 @@ func NewModelsUsecase(modelsRep entities.ModelsRepository) *modelsUse {
 	}
 }
 
-func (mu *modelsUse) GetTrainData(ctx context.Context, ratio float64) ([]entities.Data, error) {
+func (mu *modelsUse) GetData(ctx context.Context, getType string) ([]entities.Data, error) {
 	ctx = context.WithValue(ctx, entities.ModelsUse, time.Now().UnixMilli())
 	log.Printf("called:\t%v", utils.Trace())
 	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsUse).(int64)))
 
-	data, err := mu.ModelsRep.GetTrainData(ctx, ratio)
+	data, err := mu.ModelsRep.GetData(ctx, getType)
 	if err != nil {
 		return nil, err
 	}

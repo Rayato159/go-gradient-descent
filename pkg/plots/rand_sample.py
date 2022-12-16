@@ -27,6 +27,7 @@ def main(cfg: Configs):
     error = [random.uniform(-1, 1) for x in range(100)]
 
     y = (slope*x + y_intercept) + error
+    y_true = (slope*x + y_intercept)
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=random.randint(0, 100))
 
@@ -51,6 +52,18 @@ def main(cfg: Configs):
     test_data_coll.insert_many(test_doc)
 
     print("success, all data has been inserted")
+
+    from matplotlib import pyplot as plt
+    
+    op = "+" if y_intercept > 0 else ""
+    op = "+" if y_intercept > 0 else ""
+    plt.figure(figsize=(5,4))
+    plt.title(f"f(x) = {slope:.6f}x {op} {y_intercept:.6f}")
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.scatter(x, y, color="#FF597B")
+    plt.plot(x, y_true, color="#2B3A55")
+    plt.show()
 
 def mongo_conn(cfg: Configs) -> MongoClient:
     # Provide the mongodb atlas url to connect python to mongodb using pymongo

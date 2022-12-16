@@ -36,6 +36,7 @@ func main() {
 		App: configs.App{
 			Host:                 os.Getenv("FIBER_HOST"),
 			Port:                 os.Getenv("FIBER_PORT"),
+			Version:              os.Getenv("APP_VERSION"),
 			ServerRequestTimeout: os.Getenv("FIBER_REQUEST_TIMEOUT"),
 			Stage:                os.Getenv("STAGE"),
 		},

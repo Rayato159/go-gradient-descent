@@ -22,23 +22,12 @@ func NewModelsRepository(db *mongo.Database) *modelsRep {
 	}
 }
 
-func (mr *modelsRep) GetTrainData(ctx context.Context, ratio float64) ([]entities.Data, error) {
+func (mr *modelsRep) GetData(ctx context.Context, getTypeQuery string) ([]entities.Data, error) {
 	ctx = context.WithValue(ctx, entities.ModelsRep, time.Now().UnixMilli())
 	log.Printf("called:\t%v", utils.Trace())
 	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsRep).(int64)))
 
-	count, err := mr.Db.Collection("data").CountDocuments(ctx, bson.D{})
-	if err != nil {
-		fmt.Println(err.Error())
-		return nil, fmt.Errorf("error, can't count data collection with an error: %v", err.Error())
-	}
-	groupStage := bson.D{{
-		"$sample", bson.D{{
-			"size", int64(float64(count) * 0.8),
-		}},
-	}}
-
-	cursor, err := mr.Db.Collection("data").Aggregate(ctx, mongo.Pipeline{groupStage})
+	cursor, err := mr.Db.Collection("train_data").Find(ctx, bson.D{})
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, fmt.Errorf("error, can't aggregate data collection with an error: %v", err.Error())
@@ -47,6 +36,5 @@ func (mr *modelsRep) GetTrainData(ctx context.Context, ratio float64) ([]entitie
 	if err = cursor.All(ctx, &data); err != nil {
 		panic(err)
 	}
-	fmt.Println(data)
 	return data, nil
 }
