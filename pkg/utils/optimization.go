@@ -3,7 +3,11 @@ package utils
 import (
 	"fmt"
 	"math"
+	"os"
+	"strings"
+	"time"
 
+	"github.com/google/uuid"
 	"www.github.com/Rayato159/go-gradient-descent/modules/entities"
 )
 
@@ -46,6 +50,20 @@ func GradientDescent(h float64, params []float64, data *entities.DataGroup) *ent
 	p := params
 	n := make([]float64, len(params))
 
+	// Log File
+	filePath := fmt.Sprintf("assets/%v_%v.txt", time.Now().Unix(), strings.ReplaceAll(uuid.NewString(), "-", "")[:6])
+	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		defer file.Close()
+		fmt.Println(err.Error())
+	}
+	defer file.Close()
+	record := "iter\tparams\t\t\terr\n"
+	if _, err := file.WriteString(record); err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Printf("%v", record)
+
 	for errValue > 0.001 && max > 0 {
 		grad := Gradient(h, p, data.TrainData)
 		for i := range params {
@@ -58,14 +76,18 @@ func GradientDescent(h float64, params []float64, data *entities.DataGroup) *ent
 		max--
 		iter++
 		ToFixed(p, 6)
-		fmt.Printf("iter:\t%dparams:%v\terr: %v\n", iter, p, errValue)
+
+		// Write a log file
+		log := fmt.Sprintf("%d\t%v\t%v\n", iter, p, errValue)
+		if _, err := file.WriteString(log); err != nil {
+			fmt.Println(err.Error())
+		}
+		fmt.Printf("%v", log)
 	}
 
 	result := &entities.TrainRes{
-		Slope:      p[0],
-		YIntercept: p[1],
-		Error:      errValue,
-		Weights:    p,
+		Error:   errValue,
+		Weights: p,
 	}
 	return result
 }

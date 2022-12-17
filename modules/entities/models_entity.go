@@ -35,8 +35,6 @@ type TrainReq struct {
 }
 
 type TrainRes struct {
-	Slope      float64   `json:"slope"`
-	YIntercept float64   `json:"y_intercept"`
-	Error      float64   `bson:"error" json:"error"`
-	Weights    []float64 `bson:"weights" json:"weights"`
+	Error   float64   `bson:"error" json:"error"`
+	Weights []float64 `bson:"weights" json:"weights"`
 }
