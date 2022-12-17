@@ -65,7 +65,7 @@ func (mu *modelsUse) TrainModel(ctx context.Context, req *entities.TrainReq) (*e
 		rand.NormFloat64(),
 		rand.NormFloat64(),
 	}
-	utils.GradientDescent(req.StepSize, weights, data)
+	result := utils.GradientDescent(req.StepSize, weights, data)
 
-	return nil, nil
+	return result, nil
 }
