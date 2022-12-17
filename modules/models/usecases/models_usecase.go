@@ -97,3 +97,17 @@ func (mu *modelsUse) ClearRecord(ctx context.Context) error {
 	}
 	return nil
 }
+
+func (mu *modelsUse) Predict(ctx context.Context, req *entities.Predict) error {
+	ctx = context.WithValue(ctx, entities.ModelsUse, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsUse).(int64)))
+
+	weights, err := mu.ModelsRep.GetWeights(ctx)
+	if err != nil {
+		return err
+	}
+	req.Result = weights[0]*req.Feature + weights[1]
+
+	return nil
+}

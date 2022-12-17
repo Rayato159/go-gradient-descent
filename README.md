@@ -13,15 +13,19 @@
 
 <h2>API List</h2>
 <ul>
-    <li><strong>Get Data</strong></li>
+    <li><strong>Get data</strong></li>
     <li><strong>Insert a new data</strong></li>
-    <li><strong>Train Data</strong></li>
+    <li><strong>Train data</strong></li>
     <li><strong>Predict a result</strong></li>
     <li><strong>Clear data</strong></li>
+    <li><strong>Clear weights</strong></li>
 </ul>
 
 <h2>Solution</h2>
 <img src="pkg\plots\train.png">
+
+<h2>Test</h2>
+<img src="pkg\plots\test.png">
 
 <h2>🐳 MongoDb Docker Run Container</h2>
 

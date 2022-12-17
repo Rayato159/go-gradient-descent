@@ -19,6 +19,7 @@ func NewModelsController(r fiber.Router, modelsUse entities.ModelsUsecase) {
 		ModelsUse: modelsUse,
 	}
 	r.Get("/", controller.GetData)
+	r.Post("/predict", controller.Predict)
 	r.Post("/train", controller.TrainModel)
 	r.Delete("/data", controller.ClearData)
 	r.Delete("/records", controller.ClearRecord)
@@ -37,6 +38,28 @@ func (mc *modelsCon) GetData(c *fiber.Ctx) error {
 		})
 	}
 	return c.Status(fiber.StatusOK).JSON(res)
+}
+
+func (mc *modelsCon) Predict(c *fiber.Ctx) error {
+	ctx := context.WithValue(c.Context(), entities.ModelsCon, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsCon).(int64)))
+
+	req := new(entities.Predict)
+	if err := c.BodyParser(req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(entities.ErrResponse{
+			Status:  fiber.ErrBadRequest.Message,
+			Message: err.Error(),
+		})
+	}
+
+	if err := mc.ModelsUse.Predict(ctx, req); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(entities.ErrResponse{
+			Status:  fiber.ErrInternalServerError.Message,
+			Message: err.Error(),
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(req)
 }
 
 func (mc *modelsCon) TrainModel(c *fiber.Ctx) error {

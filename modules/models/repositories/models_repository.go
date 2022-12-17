@@ -8,6 +8,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"www.github.com/Rayato159/go-gradient-descent/modules/entities"
 	"www.github.com/Rayato159/go-gradient-descent/pkg/utils"
 )
@@ -113,4 +114,29 @@ func (mr *modelsRep) ClearRecord(ctx context.Context) error {
 		return fmt.Errorf("error, can't delete a record")
 	}
 	return nil
+}
+
+func (mr *modelsRep) GetWeights(ctx context.Context) ([]float64, error) {
+	ctx = context.WithValue(ctx, entities.ModelsRep, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsRep).(int64)))
+
+	weights := make([]float64, 0)
+	coll := mr.Db.Collection("records")
+
+	docs := &entities.TrainRes{
+		Weights: make([]float64, 0),
+	}
+	if err := coll.FindOne(
+		ctx,
+		bson.D{},
+		options.FindOne().SetSort(
+			bson.D{{"timestamp", -1}},
+		),
+	).Decode(&docs); err != nil {
+		return nil, err
+	}
+
+	weights = append(weights, docs.Weights...)
+	return weights, nil
 }

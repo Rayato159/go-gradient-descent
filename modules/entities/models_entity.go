@@ -18,12 +18,14 @@ type ModelsRepository interface {
 	InsertTrainResult(ctx context.Context, req *TrainRes) error
 	ClearData(ctx context.Context) error
 	ClearRecord(ctx context.Context) error
+	GetWeights(ctx context.Context) ([]float64, error)
 }
 type ModelsUsecase interface {
 	GetData(ctx context.Context) (*DataGroup, error)
 	TrainModel(ctx context.Context, req *TrainReq) (*TrainRes, error)
 	ClearData(ctx context.Context) error
 	ClearRecord(ctx context.Context) error
+	Predict(ctx context.Context, req *Predict) error
 }
 
 type DataGroup struct {
@@ -47,4 +49,9 @@ type TrainRes struct {
 	ErrorTest  float64   `bson:"error_test" json:"error_test"`
 	Weights    []float64 `bson:"weights" json:"weights"`
 	Timestamp  time.Time `bson:"timestamp" json:"timestamp"`
+}
+
+type Predict struct {
+	Feature float64 `json:"feature"`
+	Result  float64 `json:"result"`
 }
