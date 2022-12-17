@@ -27,7 +27,7 @@ func LossFunc(params []float64, data []entities.Data) float64 {
 	for i := range data {
 		result += math.Pow(data[i].Y-(ObjectiveFunc(params, data[i].X)), 2)
 	}
-	return result / float64(len(data))
+	return result
 }
 
 func Gradient(h float64, params []float64, data []entities.Data) []float64 {
