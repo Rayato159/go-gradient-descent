@@ -12,6 +12,7 @@
 </ul>
 
 <h2>API List</h2>
+<p>***All example has been added into the postman collection and environment, you can check it</p>
 <ul>
     <li><strong>Get data</strong></li>
     <li><strong>Insert a new data</strong></li>
@@ -26,6 +27,15 @@
 
 <h2>Test</h2>
 <img src="pkg\plots\test.png">
+
+<h2>Machine Learning Details</h2>
+
+```bash
+Model:          Linear Regression
+Optimizer:      Gradient Descent
+Loss Function:  Error Sum of Squares
+Max Iterations: 1000
+```
 
 <h2>🐳 MongoDb Docker Run Container</h2>
 
@@ -74,3 +84,71 @@ up or down
 ```bash
 migrate-mongo [up|down]
 ```
+
+<h2>⚙️ Start Project</h2>
+
+Clone the project
+```bash
+git clone https://github.com/Rayato159/go-gradient-descent.git
+cd ./go-gradient-descent
+```
+
+Start Go service
+```bash
+air init
+```
+
+Copy and paste the code below and repalce for some section in air.toml
+```bash
+[build]
+  cmd = "go build -o ./tmp/main.exe ./app/main.go"
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", "pkg\\databases\\mongodb\\albums-migrations"]
+
+[misc]
+  clean_on_exit = true
+```
+
+.env file
+```bash
+#Stage
+STAGE=dev
+
+#App
+FIBER_HOST=127.0.0.1
+FIBER_PORT=3000
+APP_VERSION=1.0.0
+FIBER_REQUEST_TIMEOUT=120
+
+#Database
+#MongoDb
+MONGODB_HOST=127.0.0.1
+MONGODB_PORT=27017
+MONGODB_DATABASE=go_ml_v1_db
+MONGODB_USERNAME=root
+MONGODB_PASSWORD=123456
+```
+
+Start the project!, The services are divided in two parts
+
+First start the Go service
+```
+air -c air.toml
+```
+
+Second start the python service
+```
+cd ./pkg/plots
+python main.py
+```
+
+If you get an error go find and install a module in this lists
+
+```bash
+matplotlib
+numpy
+flask
+pymongo
+dotenv
+```
+
+Have fun! 😄
