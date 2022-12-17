@@ -75,3 +75,25 @@ func (mu *modelsUse) TrainModel(ctx context.Context, req *entities.TrainReq) (*e
 
 	return result, nil
 }
+
+func (mu *modelsUse) ClearData(ctx context.Context) error {
+	ctx = context.WithValue(ctx, entities.ModelsUse, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsUse).(int64)))
+
+	if err := mu.ModelsRep.ClearData(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (mu *modelsUse) ClearRecord(ctx context.Context) error {
+	ctx = context.WithValue(ctx, entities.ModelsUse, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsUse).(int64)))
+
+	if err := mu.ModelsRep.ClearRecord(ctx); err != nil {
+		return err
+	}
+	return nil
+}

@@ -21,7 +21,7 @@
 </ul>
 
 <h2>Solution</h2>
-<img src="pkg\plots\figure_1.png">
+<img src="pkg\plots\train.png">
 
 <h2>🐳 MongoDb Docker Run Container</h2>
 

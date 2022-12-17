@@ -16,10 +16,14 @@ const (
 type ModelsRepository interface {
 	GetData(ctx context.Context, getType string, ratio float64) ([]Data, error)
 	InsertTrainResult(ctx context.Context, req *TrainRes) error
+	ClearData(ctx context.Context) error
+	ClearRecord(ctx context.Context) error
 }
 type ModelsUsecase interface {
 	GetData(ctx context.Context) (*DataGroup, error)
 	TrainModel(ctx context.Context, req *TrainReq) (*TrainRes, error)
+	ClearData(ctx context.Context) error
+	ClearRecord(ctx context.Context) error
 }
 
 type DataGroup struct {

@@ -18,8 +18,10 @@ func NewModelsController(r fiber.Router, modelsUse entities.ModelsUsecase) {
 	controller := &modelsCon{
 		ModelsUse: modelsUse,
 	}
-	r.Get("/data", controller.GetData)
+	r.Get("/", controller.GetData)
 	r.Post("/train", controller.TrainModel)
+	r.Delete("/data", controller.ClearData)
+	r.Delete("/records", controller.ClearRecord)
 }
 
 func (mc *modelsCon) GetData(c *fiber.Ctx) error {
@@ -77,4 +79,32 @@ func (mc *modelsCon) TrainModel(c *fiber.Ctx) error {
 		})
 	}
 	return c.Status(fiber.StatusOK).JSON(res)
+}
+
+func (mc *modelsCon) ClearData(c *fiber.Ctx) error {
+	ctx := context.WithValue(c.Context(), entities.ModelsCon, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsCon).(int64)))
+
+	if err := mc.ModelsUse.ClearData(ctx); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(entities.ErrResponse{
+			Status:  fiber.ErrInternalServerError.Message,
+			Message: err.Error(),
+		})
+	}
+	return c.Status(fiber.StatusNoContent).JSON(nil)
+}
+
+func (mc *modelsCon) ClearRecord(c *fiber.Ctx) error {
+	ctx := context.WithValue(c.Context(), entities.ModelsCon, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsCon).(int64)))
+
+	if err := mc.ModelsUse.ClearRecord(ctx); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(entities.ErrResponse{
+			Status:  fiber.ErrInternalServerError.Message,
+			Message: err.Error(),
+		})
+	}
+	return c.Status(fiber.StatusNoContent).JSON(nil)
 }

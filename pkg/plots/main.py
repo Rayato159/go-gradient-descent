@@ -65,7 +65,16 @@ def rand_data():
     train_data_coll.insert_many(train_doc)
     test_data_coll.insert_many(test_doc)
 
-    print("success, all data has been inserted")
+    op = "+" if y_intercept > 0 else ""
+    op = "+" if y_intercept > 0 else ""
+    plt.figure(figsize=(5,4))
+    plt.title(f"f(x) = {slope:.6f}x {op} {y_intercept:.6f}")
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.scatter(x_test, y_test, color="#FF597B")
+    plt.scatter(x_train, y_train, color="#009EFF")
+    plt.plot(x, y_true, color="#2B3A55")
+    plt.savefig('train.png')
 
 def get_plot():
     latest_record = db["records"].find_one(sort=[("$natural", -1)])
@@ -90,22 +99,20 @@ def get_plot():
     plt.ylabel("y")
     plt.scatter(x_test, y_test, color="#FF597B")
     plt.plot(x_test, y_true, color="#2B3A55")
-    plt.savefig('test_1.png')
+    plt.savefig('test.png')
 
 # Service API
 app = Flask(__name__)
 
-@app.route('/insert-rand-data', methods=["POST"])
+@app.route('/rand', methods=["POST"])
 def insert_rand_data():
-    # rand_data()
-    return {
-        "message": "success, data has been inserted"
-    }, 201
+    rand_data()
+    return send_file("./train.png", mimetype="image/png"), 201
 
-@app.route('/get-plot', methods=["GET"])
+@app.route('/plot', methods=["GET"])
 def stream_file():
     get_plot()
-    return send_file("./test_1.png", mimetype="image/png"), 200
+    return send_file("./test.png", mimetype="image/png"), 200
 
 if __name__ == "__main__":
     app.run()

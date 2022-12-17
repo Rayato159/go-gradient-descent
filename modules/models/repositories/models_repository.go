@@ -82,3 +82,35 @@ func (mr *modelsRep) InsertTrainResult(ctx context.Context, req *entities.TrainR
 	}
 	return nil
 }
+
+func (mr *modelsRep) ClearData(ctx context.Context) error {
+	ctx = context.WithValue(ctx, entities.ModelsRep, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsRep).(int64)))
+
+	collTrain := mr.Db.Collection("train_data")
+	collTest := mr.Db.Collection("test_data")
+
+	if _, err := collTrain.DeleteMany(ctx, bson.D{}); err != nil {
+		fmt.Println(err.Error())
+		return fmt.Errorf("error, can't delete a train_data")
+	}
+	if _, err := collTest.DeleteMany(ctx, bson.D{}); err != nil {
+		fmt.Println(err.Error())
+		return fmt.Errorf("error, can't delete a test_data")
+	}
+	return nil
+}
+
+func (mr *modelsRep) ClearRecord(ctx context.Context) error {
+	ctx = context.WithValue(ctx, entities.ModelsRep, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsRep).(int64)))
+
+	coll := mr.Db.Collection("records")
+	if _, err := coll.DeleteMany(ctx, bson.D{}); err != nil {
+		fmt.Println(err.Error())
+		return fmt.Errorf("error, can't delete a record")
+	}
+	return nil
+}
