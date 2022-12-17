@@ -111,3 +111,14 @@ func (mu *modelsUse) Predict(ctx context.Context, req *entities.Predict) error {
 
 	return nil
 }
+
+func (mu *modelsUse) InsertData(ctx context.Context, req *entities.DataGroup) error {
+	ctx = context.WithValue(ctx, entities.ModelsUse, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsUse).(int64)))
+
+	if err := mu.ModelsRep.InsertData(ctx, req.TrainData, req.TrainData); err != nil {
+		return err
+	}
+	return nil
+}

@@ -84,6 +84,33 @@ func (mr *modelsRep) InsertTrainResult(ctx context.Context, req *entities.TrainR
 	return nil
 }
 
+func (mr *modelsRep) InsertData(ctx context.Context, train []entities.Data, test []entities.Data) error {
+	ctx = context.WithValue(ctx, entities.ModelsRep, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsRep).(int64)))
+
+	newTrain := make([]interface{}, 0)
+	for i := range train {
+		newTrain = append(newTrain, train[i])
+	}
+	newTest := make([]interface{}, 0)
+	for i := range train {
+		newTest = append(newTest, test[i])
+	}
+
+	collTrain := mr.Db.Collection("train_data")
+	collTest := mr.Db.Collection("test_data")
+	if _, err := collTrain.InsertMany(ctx, newTrain); err != nil {
+		fmt.Println(err.Error())
+		return fmt.Errorf("error, can't insert a record")
+	}
+	if _, err := collTest.InsertMany(ctx, newTest); err != nil {
+		fmt.Println(err.Error())
+		return fmt.Errorf("error, can't insert a record")
+	}
+	return nil
+}
+
 func (mr *modelsRep) ClearData(ctx context.Context) error {
 	ctx = context.WithValue(ctx, entities.ModelsRep, time.Now().UnixMilli())
 	log.Printf("called:\t%v", utils.Trace())

@@ -19,6 +19,7 @@ type ModelsRepository interface {
 	ClearData(ctx context.Context) error
 	ClearRecord(ctx context.Context) error
 	GetWeights(ctx context.Context) ([]float64, error)
+	InsertData(ctx context.Context, train []Data, test []Data) error
 }
 type ModelsUsecase interface {
 	GetData(ctx context.Context) (*DataGroup, error)
@@ -26,6 +27,7 @@ type ModelsUsecase interface {
 	ClearData(ctx context.Context) error
 	ClearRecord(ctx context.Context) error
 	Predict(ctx context.Context, req *Predict) error
+	InsertData(ctx context.Context, req *DataGroup) error
 }
 
 type DataGroup struct {

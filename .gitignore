@@ -37,5 +37,6 @@ vendor
 *.ipynb
 *.log
 
+/pkg/plots/__pycache__
 /pkg/databases/mongodb/albums-migrations/node_modules
 package-lock.json
