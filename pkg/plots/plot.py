@@ -1,12 +1,14 @@
 from rand_sample import Database
+from flask import Flask, send_file
 from matplotlib import pyplot as plt
 import numpy as np
 from dotenv import load_dotenv
 
-def main():
-    # Load database
-    load_dotenv("../../.env.dev")
-    db = Database().get_db()
+# Load database
+load_dotenv("../../.env.dev")
+db = Database().get_db()
+
+def get_plot():
     latest_record = db["records"].find_one(sort=[("$natural", -1)])
     test_data = db["test_data"].find()
 
@@ -29,7 +31,14 @@ def main():
     plt.ylabel("y")
     plt.scatter(x_test, y_test, color="#FF597B")
     plt.plot(x_test, y_true, color="#2B3A55")
-    plt.show()
-    
+    plt.savefig('test_1.png')
+
+app = Flask(__name__)
+
+@app.route('/get-plot', methods=["GET"])
+def stream_file():
+    get_plot()
+    return send_file("./test_1.png", mimetype="image/png") 
+
 if __name__ == "__main__":
-    main()
+    app.run()
