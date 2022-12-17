@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -66,7 +65,7 @@ func (mu *modelsUse) TrainModel(ctx context.Context, req *entities.TrainReq) (*e
 		rand.NormFloat64(),
 		rand.NormFloat64(),
 	}
-	fmt.Println(utils.Gradient(req.StepSize, weights, data.TrainData))
+	utils.GradientDescent(req.StepSize, weights, data)
 
 	return nil, nil
 }

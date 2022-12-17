@@ -16,7 +16,6 @@
     <li><strong>Get Data</strong></li>
     <li><strong>Insert a new data</strong></li>
     <li><strong>Train Data</strong></li>
-    <li><strong>Test Data</strong></li>
     <li><strong>Predict a result</strong></li>
     <li><strong>Clear data</strong></li>
 </ul>
