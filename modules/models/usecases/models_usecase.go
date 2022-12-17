@@ -66,6 +66,9 @@ func (mu *modelsUse) TrainModel(ctx context.Context, req *entities.TrainReq) (*e
 		rand.NormFloat64(),
 	}
 	result := utils.GradientDescent(req.StepSize, weights, data)
+	if err := mu.ModelsRep.InsertTrainResult(ctx, result); err != nil {
+		return nil, err
+	}
 
 	return result, nil
 }

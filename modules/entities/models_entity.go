@@ -1,6 +1,9 @@
 package entities
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type ModelsContext string
 
@@ -12,6 +15,7 @@ const (
 
 type ModelsRepository interface {
 	GetData(ctx context.Context, getType string, ratio float64) ([]Data, error)
+	InsertTrainResult(ctx context.Context, req *TrainRes) error
 }
 type ModelsUsecase interface {
 	GetData(ctx context.Context) (*DataGroup, error)
@@ -35,6 +39,7 @@ type TrainReq struct {
 }
 
 type TrainRes struct {
-	Error   float64   `bson:"error" json:"error"`
-	Weights []float64 `bson:"weights" json:"weights"`
+	Error     float64   `bson:"error" json:"error"`
+	Weights   []float64 `bson:"weights" json:"weights"`
+	Timestamp time.Time `bson:"timestamp" json:"timestamp"`
 }

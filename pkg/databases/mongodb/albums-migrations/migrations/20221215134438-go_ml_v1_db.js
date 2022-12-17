@@ -1,4 +1,4 @@
-import { Double } from "mongodb"
+import { Double } from "mongodb";
 
 export const up = async (db, client) => {
     const session = client.startSession();
@@ -53,10 +53,13 @@ export const up = async (db, client) => {
                     $jsonSchema: {
                         bsonType: "object",
                         title: "Weight Object Validation",
-                        required: ["weights", "error"],
+                        required: ["weights", "error", "timestamp"],
                         properties: {
                             weights: {
-                                bsonType: ["double"],
+                                bsonType: "array",
+                                items: {
+                                    bsonType: "double",
+                                },
                                 description:
                                     "'weights' must be a [double] and is required",
                             },
@@ -65,56 +68,13 @@ export const up = async (db, client) => {
                                 description:
                                     "'error' must be a double and is required",
                             },
+                            timestamp: {
+                                bsonType: "date",
+                            },
                         },
                     },
                 },
             });
-
-            // await db.collection("train_data").insertMany([
-            //     {
-            //         x: Double(1.0),
-            //         y: Double(2.0),
-            //     },
-            //     {
-            //         x: Double(2.0),
-            //         y: Double(3.0),
-            //     },
-            //     {
-            //         x: Double(3.0),
-            //         y: Double(4.0),
-            //     },
-            //     {
-            //         x: Double(4.0),
-            //         y: Double(6.0),
-            //     },
-            //     {
-            //         x: Double(5.0),
-            //         y: Double(7.0),
-            //     },
-            //     {
-            //         x: Double(6.0),
-            //         y: Double(9.0),
-            //     },
-            //     {
-            //         x: Double(7.0),
-            //         y: Double(11.0),
-            //     },
-            //     {
-            //         x: Double(8.0),
-            //         y: Double(13.0),
-            //     },
-            // ]);
-
-            // await db.collection("test_data").insertMany([
-            //     {
-            //         x: Double(9.0),
-            //         y: Double(15.0),
-            //     },
-            //     {
-            //         x: Double(10.0),
-            //         y: Double(17.0),
-            //     },
-            // ]);
         });
     } finally {
         await session.endSession();

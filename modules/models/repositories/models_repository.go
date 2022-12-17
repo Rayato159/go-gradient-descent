@@ -68,3 +68,17 @@ func (mr *modelsRep) GetData(ctx context.Context, getType string, ratio float64)
 	}
 	return data, nil
 }
+
+func (mr *modelsRep) InsertTrainResult(ctx context.Context, req *entities.TrainRes) error {
+	ctx = context.WithValue(ctx, entities.ModelsRep, time.Now().UnixMilli())
+	log.Printf("called:\t%v", utils.Trace())
+	defer log.Printf("return:\t%v time:%v ms", utils.Trace(), utils.CallTimer(ctx.Value(entities.ModelsRep).(int64)))
+
+	coll := mr.Db.Collection("records")
+	req.Timestamp = time.Now()
+	if _, err := coll.InsertOne(ctx, req); err != nil {
+		fmt.Println(err.Error())
+		return fmt.Errorf("error, can't insert a record")
+	}
+	return nil
+}
