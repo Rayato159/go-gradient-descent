@@ -53,7 +53,7 @@ export const up = async (db, client) => {
                     $jsonSchema: {
                         bsonType: "object",
                         title: "Weight Object Validation",
-                        required: ["weights", "error", "timestamp"],
+                        required: ["weights", "error_train", "error_test", "timestamp"],
                         properties: {
                             weights: {
                                 bsonType: "array",
@@ -63,10 +63,15 @@ export const up = async (db, client) => {
                                 description:
                                     "'weights' must be a [double] and is required",
                             },
-                            error: {
+                            error_train: {
                                 bsonType: "double",
                                 description:
-                                    "'error' must be a double and is required",
+                                    "'error_train' must be a double and is required",
+                            },
+                            error_test: {
+                                bsonType: "double",
+                                description:
+                                    "'error_test' must be a double and is required",
                             },
                             timestamp: {
                                 bsonType: "date",

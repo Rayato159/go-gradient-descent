@@ -39,7 +39,8 @@ type TrainReq struct {
 }
 
 type TrainRes struct {
-	Error     float64   `bson:"error" json:"error"`
-	Weights   []float64 `bson:"weights" json:"weights"`
-	Timestamp time.Time `bson:"timestamp" json:"timestamp"`
+	ErrorTrain float64   `bson:"error_train" json:"error_train"`
+	ErrorTest  float64   `bson:"error_test" json:"error_test"`
+	Weights    []float64 `bson:"weights" json:"weights"`
+	Timestamp  time.Time `bson:"timestamp" json:"timestamp"`
 }

@@ -50,7 +50,7 @@ func (mu *modelsUse) TrainModel(ctx context.Context, req *entities.TrainReq) (*e
 	if err != nil {
 		return nil, err
 	}
-	test, err := mu.ModelsRep.GetData(ctx, "test_data", req.TrainDataRatio)
+	test, err := mu.ModelsRep.GetData(ctx, "test_data", 0)
 	if err != nil {
 		return nil, err
 	}
@@ -65,10 +65,13 @@ func (mu *modelsUse) TrainModel(ctx context.Context, req *entities.TrainReq) (*e
 		rand.NormFloat64(),
 		rand.NormFloat64(),
 	}
-	result := utils.GradientDescent(req.StepSize, weights, data)
+	result := utils.GradientDescent(req.LearningRate, req.StepSize, weights, data)
 	if err := mu.ModelsRep.InsertTrainResult(ctx, result); err != nil {
 		return nil, err
 	}
+
+	// Calculate an error from test data
+	result.ErrorTest = utils.AverageTestError(result.Weights, test)
 
 	return result, nil
 }

@@ -21,12 +21,13 @@ func ObjectiveFunc(params []float64, x float64) float64 {
 	return params[0]*x + params[1]
 }
 
-func SumSquareError(params []float64, data []entities.Data) float64 {
+func LossFunc(params []float64, data []entities.Data) float64 {
+	// MeanSquareErr
 	var result float64
 	for i := range data {
 		result += math.Pow(data[i].Y-(ObjectiveFunc(params, data[i].X)), 2)
 	}
-	return result
+	return result / float64(len(data))
 }
 
 func Gradient(h float64, params []float64, data []entities.Data) []float64 {
@@ -38,13 +39,13 @@ func Gradient(h float64, params []float64, data []entities.Data) []float64 {
 		b = append(b, params...)
 		f[i] += h
 		b[i] -= h
-		results[i] = (SumSquareError(f, data) - SumSquareError(b, data)) / (2 * h)
+		results[i] = (LossFunc(f, data) - LossFunc(b, data)) / (2 * h)
 	}
 	return results
 }
 
-func GradientDescent(h float64, params []float64, data *entities.DataGroup) *entities.TrainRes {
-	var errValue float64 = 100
+func GradientDescent(h float64, lr float64, params []float64, data *entities.DataGroup) *entities.TrainRes {
+	var errValue float64 = 1
 	max := 1000
 	iter := 0
 	p := params
@@ -67,12 +68,12 @@ func GradientDescent(h float64, params []float64, data *entities.DataGroup) *ent
 	for errValue > 0.001 && max > 0 {
 		grad := Gradient(h, p, data.TrainData)
 		for i := range params {
-			n[i] = p[i] - h*grad[i]
+			n[i] = p[i] - lr*grad[i]
 		}
 		copy(p, n)
 
 		n = make([]float64, len(params))
-		errValue = SumSquareError(p, data.TrainData)
+		errValue = LossFunc(p, data.TrainData)
 		max--
 		iter++
 		ToFixed(p, 6)
@@ -86,8 +87,17 @@ func GradientDescent(h float64, params []float64, data *entities.DataGroup) *ent
 	}
 
 	result := &entities.TrainRes{
-		Error:   errValue,
-		Weights: p,
+		ErrorTrain: errValue,
+		Weights:    p,
 	}
 	return result
+}
+
+func AverageTestError(params []float64, test []entities.Data) float64 {
+	var result float64
+	for i := range test {
+		result += math.Abs(test[i].Y - ObjectiveFunc(params, test[i].X))
+	}
+	result = result / float64(len(test))
+	return math.Round(result*math.Pow10(6)) / math.Pow10(6)
 }
