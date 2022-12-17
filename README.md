@@ -34,7 +34,6 @@
 Model:          Linear Regression
 Optimizer:      Gradient Descent
 Loss Function:  Error Sum of Squares
-Max Iterations: 1000
 ```
 
 <h2>🐳 MongoDb Docker Run Container</h2>
