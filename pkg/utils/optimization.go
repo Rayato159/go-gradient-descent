@@ -51,7 +51,7 @@ func GradientDescent(h float64, params []float64, data *entities.DataGroup) *ent
 	n := make([]float64, len(params))
 
 	// Log File
-	filePath := fmt.Sprintf("assets/%v_%v.txt", time.Now().Unix(), strings.ReplaceAll(uuid.NewString(), "-", "")[:6])
+	filePath := fmt.Sprintf("assets/%v_%v.log", time.Now().Unix(), strings.ReplaceAll(uuid.NewString(), "-", "")[:6])
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		defer file.Close()
