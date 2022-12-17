@@ -5,10 +5,6 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 
-class Configs:
-    def __init__(self):
-        self.database = Database()
-
 class Database:
     def __init__(self):
         self.host = os.getenv("MONGODB_HOST")
@@ -17,7 +13,17 @@ class Database:
         self.username = os.getenv("MONGODB_USERNAME")
         self.password = os.getenv("MONGODB_PASSWORD")
 
-def main(cfg: Configs):
+    def get_db(self) -> MongoClient:
+        # Provide the mongodb atlas url to connect python to mongodb using pymongo
+        CONNECTION_STRING = f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}"
+
+        # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
+        db = MongoClient(CONNECTION_STRING)
+
+        # Create the database for our example (we will use the same database throughout the tutorial
+        return db[f"{self.database}"]
+
+def main(db: MongoClient):
     from sklearn.model_selection import train_test_split
     
     x = np.linspace(start=-10, stop=10, num=100)
@@ -44,7 +50,6 @@ def main(cfg: Configs):
             "y": j
         })
 
-    db = mongo_conn(cfg)
     train_data_coll = db["train_data"]
     test_data_coll = db["test_data"]
 
@@ -65,21 +70,11 @@ def main(cfg: Configs):
     plt.plot(x, y_true, color="#2B3A55")
     plt.show()
 
-def mongo_conn(cfg: Configs) -> MongoClient:
-    # Provide the mongodb atlas url to connect python to mongodb using pymongo
-    CONNECTION_STRING = f"mongodb://{cfg.database.username}:{cfg.database.password}@{cfg.database.host}"
-
-    # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
-    db = MongoClient(CONNECTION_STRING)
-
-    # Create the database for our example (we will use the same database throughout the tutorial
-    return db[f"{cfg.database.database}"]
-
 if __name__ == "__main__":
     random.seed(time.time_ns())
     load_dotenv("../../.env.dev")
 
     # Load configs
-    cfg = Configs()
+    db = Database()
 
-    main(cfg)
+    main(db)
